@@ -287,7 +287,7 @@ WowCube Empatic Assistant представляет собой мультимод
 
 ## Схема
 
- ```mermaid
+```mermaid
 
 flowchart TD
     A[Видеопоток] --> A1[Детектор движения/лица]
@@ -419,4 +419,4 @@ flowchart TD
     style EE fill:#e1f5fe
     style FF fill:#e0f2f1
 
- ```
+```
