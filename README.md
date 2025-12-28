@@ -153,7 +153,6 @@ WowCube Empatic Assistant представляет собой мультимод
 - **CPU**: Intel i7-13700K или AMD Ryzen 7 7700X (8+ cores)
 - **RAM**: 32GB DDR4
 - **SSD**: 1TB NVMe для FalkorDB данных и снапшотов
-- **Сеть**: 1Gbps Ethernet
 
 **Рекомендуемые требования:**
 - **GPU**: NVIDIA A100 80GB или H100
