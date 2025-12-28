@@ -148,12 +148,6 @@ WowCube Empatic Assistant представляет собой мультимод
 ### Сервер конфигурация
 
 #### GPU сервер (основной)
-**Минимальные требования (с FalkorDB):**
-- **GPU**: NVIDIA RTX 4070 12GB или RTX 4060 Ti 16GB
-- **CPU**: Intel i7-13700K или AMD Ryzen 7 7700X (8+ cores)
-- **RAM**: 32GB DDR4
-- **SSD**: 1TB NVMe для FalkorDB данных и снапшотов
-
 **Рекомендуемые требования:**
 - **GPU**: NVIDIA A100 80GB или H100
 - **CPU**: Intel Xeon Gold 6348 или AMD EPYC 7543 (28+ cores)
