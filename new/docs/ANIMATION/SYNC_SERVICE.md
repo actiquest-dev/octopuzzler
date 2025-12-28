@@ -217,7 +217,7 @@ class PhonemeExtractor:
             from g2p_en import G2p
             self.g2p = G2p()
         except ImportError:
-            print("⚠️  g2p_en not installed, using basic phoneme extraction")
+            print("  g2p_en not installed, using basic phoneme extraction")
             self.g2p = None
     
     def extract_phonemes(self, text: str, audio_duration_ms: float) -> List[Phoneme]:
@@ -1048,14 +1048,14 @@ if __name__ == "__main__":
 
 This Animation Synchronization Service:
 
-✅ **Separate microservice** for clean architecture  
-✅ **Phoneme extraction** with timing alignment  
-✅ **Emotion detection** from text + face  
-✅ **Natural gaze planning** based on emotion  
-✅ **Sync markers** for frame-perfect animation  
-✅ **Intensity calculation** for expression amplitude  
-✅ **Easy integration** with main backend  
-✅ **Testable** with various emotions  
+ **Separate microservice** for clean architecture  
+ **Phoneme extraction** with timing alignment  
+ **Emotion detection** from text + face  
+ **Natural gaze planning** based on emotion  
+ **Sync markers** for frame-perfect animation  
+ **Intensity calculation** for expression amplitude  
+ **Easy integration** with main backend  
+ **Testable** with various emotions  
 
 ---
 

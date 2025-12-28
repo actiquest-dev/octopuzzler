@@ -451,7 +451,7 @@ If churn rate 10%/month:
 Month 1:   Users: 50,    Revenue: $150,     Cost: $6,000,    Loss: -$5,850
 Month 3:   Users: 200,   Revenue: $1,000,   Cost: $6,500,    Loss: -$5,500
 Month 6:   Users: 800,   Revenue: $4,800,   Cost: $7,000,    Loss: -$2,200
-Month 9:   Users: 2,000, Revenue: $12,000,  Cost: $8,000,    Profit: +$4,000 ✓
+Month 9:   Users: 2,000, Revenue: $12,000,  Cost: $8,000,    Profit: +$4,000 
 Month 12:  Users: 4,000, Revenue: $24,000,  Cost: $9,000,    Profit: +$15,000
 
 Total Year 1: -$65,000 (investment phase)
@@ -463,7 +463,7 @@ Year 2 projection: +$150,000 (profitable)
 ```
 Month 1:   Users: 100,   Revenue: $300,     Cost: $12,000,   Loss: -$11,700
 Month 3:   Users: 500,   Revenue: $3,000,   Cost: $10,000,   Loss: -$7,000
-Month 6:   Users: 2,000, Revenue: $12,000,  Cost: $8,000,    Profit: +$4,000 ✓
+Month 6:   Users: 2,000, Revenue: $12,000,  Cost: $8,000,    Profit: +$4,000 
 Month 9:   Users: 5,000, Revenue: $30,000,  Cost: $15,000,   Profit: +$15,000
 Month 12:  Users: 12,000,Revenue: $72,000,  Cost: $25,000,   Profit: +$47,000
 
@@ -476,39 +476,39 @@ Year 2 projection: +$600,000+ (scaling)
 ### 1. Optimize Infrastructure (Save $100-300/month)
 
 ```
-✓ Use Cloudflare R2 instead of S3 (-$1/month)
-✓ Compress audio/video (-$50-100/month)
-✓ Cache aggressively (-$20-50/month)
-✓ Use Hetzner instead of AWS (-$200-300/month, if less reliability ok)
-✓ Local inference where possible (-$50-100/month)
+ Use Cloudflare R2 instead of S3 (-$1/month)
+ Compress audio/video (-$50-100/month)
+ Cache aggressively (-$20-50/month)
+ Use Hetzner instead of AWS (-$200-300/month, if less reliability ok)
+ Local inference where possible (-$50-100/month)
 ```
 
 ### 2. Reduce Development Costs (Save $2,000-5,000 in Year 1)
 
 ```
-✓ Use open-source components
-✓ Hire junior developers ($30-40/hr vs $50+)
-✓ Use no-code/low-code tools where possible
-✓ Share code with other projects
+ Use open-source components
+ Hire junior developers ($30-40/hr vs $50+)
+ Use no-code/low-code tools where possible
+ Share code with other projects
 ```
 
 ### 3. Lower CAC (Save $5,000-10,000 in Year 1)
 
 ```
-✓ Product-led growth (free tier) - costs $0
-✓ Referral program (pay per referral)
-✓ Community/content marketing
-✓ Partnerships instead of ads
-✓ Influencer/GitHub stars organic growth
+ Product-led growth (free tier) - costs $0
+ Referral program (pay per referral)
+ Community/content marketing
+ Partnerships instead of ads
+ Influencer/GitHub stars organic growth
 ```
 
 ### 4. Reduce Support Costs (Save $1,000-2,000/month)
 
 ```
-✓ Self-service documentation
-✓ AI chatbot for support
-✓ Community support (users help users)
-✓ Async support (don't need live support staff)
+ Self-service documentation
+ AI chatbot for support
+ Community support (users help users)
+ Async support (don't need live support staff)
 ```
 
 ## Funding Strategy

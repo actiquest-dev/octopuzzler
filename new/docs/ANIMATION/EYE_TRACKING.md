@@ -109,7 +109,7 @@ class EyeTracker:
         self.gaze_history = []
         self.history_size = 5
         
-        print("✓ Eye tracker initialized")
+        print(" Eye tracker initialized")
     
     async def get_gaze(self) -> Optional[GazeVector]:
         """Get current gaze vector (where user is looking)"""
@@ -608,4 +608,4 @@ async def test_gaze_smoothing():
 - **Performance monitoring** - FPS, latency, detection rate
 - **Production-ready** - Error handling + fallbacks
 
-Perfect для interactive eye contact! 👀
+Perfect для interactive eye contact! 

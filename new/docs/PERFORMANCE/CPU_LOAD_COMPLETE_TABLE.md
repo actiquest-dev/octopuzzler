@@ -335,14 +335,14 @@ With 55-70% CPU still available, you can add:
 ```
 Potential additions (and their CPU cost):
 
-✓ Tentacle wave animations:       +2-3%
-✓ Particle effects (bubbles, etc): +3-5%
-✓ Background animation:            +2-3%
-✓ Gesture system (waving):         +2-3%
-✓ Emotion morphing:                +1-2%
-✓ Advanced physics:                +3-5%
-✓ Multiple avatar variants:        +1-2%
-✓ Full-body tracking:              +5-8%
+ Tentacle wave animations:       +2-3%
+ Particle effects (bubbles, etc): +3-5%
+ Background animation:            +2-3%
+ Gesture system (waving):         +2-3%
+ Emotion morphing:                +1-2%
+ Advanced physics:                +3-5%
+ Multiple avatar variants:        +1-2%
+ Full-body tracking:              +5-8%
 
 Total possible:                     ~20-31% additional
 

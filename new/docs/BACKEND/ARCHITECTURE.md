@@ -120,20 +120,20 @@ Complete backend system for processing device input and streaming responses with
 ## Option 1: Gemini Live API (Temporary/MVP)
 
 ### Advantages
-- ✅ Easiest to implement (weeks, not months)
-- ✅ No GPU server management
-- ✅ Built-in speech understanding + generation
-- ✅ Good emotion understanding via context
-- ✅ Streaming responses with interruption handling
-- ✅ Multi-turn conversation state
+-  Easiest to implement (weeks, not months)
+-  No GPU server management
+-  Built-in speech understanding + generation
+-  Good emotion understanding via context
+-  Streaming responses with interruption handling
+-  Multi-turn conversation state
 
 ### Disadvantages
-- ❌ Closed-source (cannot customize TTS voice)
-- ❌ Per-call costs (~$0.01-0.03 per minute)
-- ❌ Latency: 100-300ms (acceptable but not optimal)
-- ❌ Quota limits (may not scale to many users)
-- ❌ No emotion control over output speech
-- ❌ Vendor lock-in
+-  Closed-source (cannot customize TTS voice)
+-  Per-call costs (~$0.01-0.03 per minute)
+-  Latency: 100-300ms (acceptable but not optimal)
+-  Quota limits (may not scale to many users)
+-  No emotion control over output speech
+-  Vendor lock-in
 
 ### Implementation
 
@@ -285,22 +285,22 @@ async def websocket_endpoint(websocket: WebSocket, device_id: str):
 ## Option 2: Self-Hosted on Modal.com (Recommended for MVP+)
 
 ### Advantages
-- ✅ Full control over models & TTS voice
-- ✅ Emotion-aware speech customization
-- ✅ Lower latency (50-150ms)
-- ✅ Cost-effective at scale (GPU-minute pricing)
-- ✅ No API quota limits
-- ✅ Custom model fine-tuning possible
-- ✅ Privacy (no data sent to external API)
-- ✅ Can use open-source models (Qwen, Mistral, etc)
+-  Full control over models & TTS voice
+-  Emotion-aware speech customization
+-  Lower latency (50-150ms)
+-  Cost-effective at scale (GPU-minute pricing)
+-  No API quota limits
+-  Custom model fine-tuning possible
+-  Privacy (no data sent to external API)
+-  Can use open-source models (Qwen, Mistral, etc)
 
 ### Disadvantages
-- ❌ More complex setup (2-3 weeks)
-- ❌ Need to manage GPU resources
-- ❌ Cold starts (~3-5 seconds first call)
-- ❌ Slightly higher latency than Gemini for first response
-- ❌ Requires ML/DevOps knowledge
-- ❌ More expensive at low scale
+-  More complex setup (2-3 weeks)
+-  Need to manage GPU resources
+-  Cold starts (~3-5 seconds first call)
+-  Slightly higher latency than Gemini for first response
+-  Requires ML/DevOps knowledge
+-  More expensive at low scale
 
 ### Architecture: Qwen Audio + Speech-to-Speech
 
@@ -400,10 +400,10 @@ class OctopusAvatarBackend:
             )
             self.qwen_processor = AutoProcessor.from_pretrained("Qwen/Qwen2-Audio-7B")
             self.use_qwen_audio = True
-            print("✓ Qwen Audio loaded")
+            print(" Qwen Audio loaded")
         except:
             self.use_qwen_audio = False
-            print("⚠ Qwen Audio not available, using Text-based pipeline")
+            print(" Qwen Audio not available, using Text-based pipeline")
         
         # Option B: Fallback to text pipeline
         if not self.use_qwen_audio:
@@ -423,7 +423,7 @@ class OctopusAvatarBackend:
                 model_name="tts_models/en/ljspeech/glow-tts",
                 gpu=True
             )
-            print("✓ Text pipeline loaded (TTS + LLM)")
+            print(" Text pipeline loaded (TTS + LLM)")
         
         # Load emotion detection (lightweight)
         from transformers import pipeline
@@ -432,7 +432,7 @@ class OctopusAvatarBackend:
             model="michellejieli/emotion_image_recognition_model",
             device=0
         )
-        print("✓ Emotion detection loaded")
+        print(" Emotion detection loaded")
     
     @modal.method
     async def process_audio(
@@ -802,12 +802,12 @@ modal run modal_backend.py
 ## Option 3: OpenAI Realtime API (Alternative)
 
 ### Features
-- ✅ Built-in speech-to-speech
-- ✅ Low latency (100-200ms)
-- ✅ Streaming responses
-- ✅ Easy to integrate
-- ❌ Proprietary
-- ❌ Higher cost than Modal
+-  Built-in speech-to-speech
+-  Low latency (100-200ms)
+-  Streaming responses
+-  Easy to integrate
+-  Proprietary
+-  Higher cost than Modal
 
 ```python
 # openai_realtime_handler.py

@@ -55,7 +55,7 @@ Device animation frame render:        0-66ms
   (At 15fps, 66ms per frame)
   
 ─────────────────────────────────────────
-TOTAL GEMINI LIVE:                    420-1116ms ❌
+TOTAL GEMINI LIVE:                    420-1116ms 
 
 AVERAGE: ~700ms (UNACCEPTABLE)
 BEST CASE: ~420ms (Uncomfortable)
@@ -98,23 +98,23 @@ Best case: ~375ms (Acceptable but not great)
 ```
 Qwen 3.x Models (as of Dec 2024):
 
-❌ Qwen-Audio-Chat
+ Qwen-Audio-Chat
    - NOT speech-to-speech
    - Only audio input → text output
    - No streaming TTS back
    - Latency: Similar to Gemini (400-600ms)
 
-❌ Qwen Omni
+ Qwen Omni
    - Announced but NOT released publicly
    - No official release date
    - API not available
    - Specs unknown
 
-❌ Qwen VL (Vision Language)
+ Qwen VL (Vision Language)
    - No audio support
    - Not suitable for this task
 
-✅ Qwen 3.2B, 7B, 72B (LLM only)
+ Qwen 3.2B, 7B, 72B (LLM only)
    - Fast text generation (50-150ms)
    - But no built-in TTS
    - Need separate TTS pipeline
@@ -129,7 +129,7 @@ Qwen 3.x Models (as of Dec 2024):
 
 ---
 
-## Option 3: Separate STT + LLM + TTS Pipeline (✅ RECOMMENDED)
+## Option 3: Separate STT + LLM + TTS Pipeline ( RECOMMENDED)
 
 ### Architecture
 
@@ -218,7 +218,7 @@ BEST CASE: 340ms (Very good!)
 WORST CASE: 590ms (Still acceptable)
 
 With local inference (no network):    180-350ms
-  BEST CASE: 180ms (Excellent! ✅)
+  BEST CASE: 180ms (Excellent! )
   AVERAGE: 265ms (Perfect)
 ```
 
@@ -272,8 +272,8 @@ PERCEIVED LATENCY: 380-450ms (Good!)
 | **Device buffering** | 50-100ms | 50-100ms | 50-100ms |
 | **Animation render** | 0-66ms | 0-66ms | 0-66ms |
 | | | | |
-| **TOTAL (Cloud)** | 420-1116ms ❌ | 420-1116ms ❌ | 340-590ms ✅ |
-| **TOTAL (Local)** | N/A | N/A | 180-350ms ✅✅ |
+| **TOTAL (Cloud)** | 420-1116ms  | 420-1116ms  | 340-590ms  |
+| **TOTAL (Local)** | N/A | N/A | 180-350ms  |
 | **Average** | 700ms | 700ms | 465ms (cloud) / 265ms (local) |
 | **Best case** | 420ms | 420ms | 340ms (cloud) / 180ms (local) |
 
@@ -349,18 +349,18 @@ START: What's your timeline?
 ├─ "Need good realtime"
 │  ├─ "Have GPU server available?"
 │  │  └─→ YES: Deploy Option 3B (Fully Local)
-│  │      Latency: 350-450ms ✅
+│  │      Latency: 350-450ms 
 │  │      Cost: $85/month
 │  │      Complexity: Medium
 │  │
 │  └─→ NO: Deploy Option 3A (Hybrid)
-│      Latency: 350-450ms ✅
+│      Latency: 350-450ms 
 │      Cost: $85-150/month
 │      Complexity: Medium
 │
 ├─ "Must have <300ms latency"
 │  └─→ Deploy Option 3B with local inference
-│      Latency: 250-350ms ✅✅
+│      Latency: 250-350ms 
 │      Cost: $85/month
 │      Complexity: High
 
@@ -568,11 +568,11 @@ async def websocket_endpoint(websocket: WebSocket, device_id: str):
 
 | Approach | Latency | Cost/month (100 users) | Setup Time | Infrastructure | Recommendation |
 |----------|---------|----------------------|-----------|-----------------|---|
-| **Gemini Live** | 700ms ❌ | $1200-1800 | 3 days | 0 servers | MVP only |
+| **Gemini Live** | 700ms  | $1200-1800 | 3 days | 0 servers | MVP only |
 | **Qwen Omni** | N/A (unavailable) | TBD | N/A | N/A | Not yet |
-| **Separate - Hybrid** | 380ms ✅ | $100-150 | 2 weeks | 1 Modal GPU | **Recommended** |
-| **Separate - Local** | 320ms ✅✅ | $85-120 | 2 weeks | 1 GPU server | **Best** |
-| **Separate - Cloud** | 450ms ✅ | $150-200 | 2 weeks | 3+ cloud services | Complex |
+| **Separate - Hybrid** | 380ms  | $100-150 | 2 weeks | 1 Modal GPU | **Recommended** |
+| **Separate - Local** | 320ms  | $85-120 | 2 weeks | 1 GPU server | **Best** |
+| **Separate - Cloud** | 450ms  | $150-200 | 2 weeks | 3+ cloud services | Complex |
 
 ---
 
@@ -582,23 +582,23 @@ async def websocket_endpoint(websocket: WebSocket, device_id: str):
 
 ```
 Qwen 3.2B:
-  ✅ Fast text generation (50-100ms)
-  ❌ No built-in TTS
-  ❌ No speech input
+   Fast text generation (50-100ms)
+   No built-in TTS
+   No speech input
   → Use with separate STT/TTS
 
 Qwen Audio Chat:
-  ✅ Can take audio input
-  ⚠️ Returns TEXT only
-  ❌ No speech output
-  ❌ Not streaming
+   Can take audio input
+   Returns TEXT only
+   No speech output
+   Not streaming
   → Not suitable for realtime
 
 Qwen Omni:
-  ❌ Announced but NOT released
-  ❌ No public API
-  ❌ No latency specs
-  ❌ No ETA
+   Announced but NOT released
+   No public API
+   No latency specs
+   No ETA
   → Don't wait for this
 ```
 
@@ -707,11 +707,11 @@ T200-300ms: Device renders animations
 
 ### For Real-Time Performance:
 
-**❌ Don't use:** Gemini Live for production (700ms is too slow)  
-**❌ Don't wait for:** Qwen Omni (unknown release, not worth waiting)  
-**✅ Use:** Separate STT + LLM + TTS pipeline  
-**✅ Best:** Local inference (300-350ms latency)  
-**✅ Recommended:** Hybrid (350-400ms latency, better scaling)  
+** Don't use:** Gemini Live for production (700ms is too slow)  
+** Don't wait for:** Qwen Omni (unknown release, not worth waiting)  
+** Use:** Separate STT + LLM + TTS pipeline  
+** Best:** Local inference (300-350ms latency)  
+** Recommended:** Hybrid (350-400ms latency, better scaling)  
 
 ### Implementation Timeline:
 

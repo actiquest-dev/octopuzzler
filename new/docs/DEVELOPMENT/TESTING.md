@@ -841,35 +841,35 @@ pytest tests/ -m stress
 
 ```
 Unit Tests:
-  ☐ >80% code coverage
-  ☐ All unit tests passing
-  ☐ No flaky tests (pass 100% of time)
+   >80% code coverage
+   All unit tests passing
+   No flaky tests (pass 100% of time)
   
 Integration Tests:
-  ☐ All modules work together
-  ☐ WebSocket integration working
-  ☐ Error handling tested
+   All modules work together
+   WebSocket integration working
+   Error handling tested
   
 E2E Tests:
-  ☐ Complete flows work
-  ☐ All emotions handled
-  ☐ Performance budgets met
+   Complete flows work
+   All emotions handled
+   Performance budgets met
   
 Performance:
-  ☐ Latency < 500ms E2E
-  ☐ Memory < 20GB
-  ☐ CPU < 30% average
-  ☐ No memory leaks
+   Latency < 500ms E2E
+   Memory < 20GB
+   CPU < 30% average
+   No memory leaks
   
 Stress:
-  ☐ 100 concurrent requests work
-  ☐ Long sessions (1hr) stable
-  ☐ Graceful degradation under load
+   100 concurrent requests work
+   Long sessions (1hr) stable
+   Graceful degradation under load
   
 CI/CD:
-  ☐ All tests pass on CI
-  ☐ Coverage reports generated
-  ☐ Automated deployment configured
+   All tests pass on CI
+   Coverage reports generated
+   Automated deployment configured
 ```
 
 ---

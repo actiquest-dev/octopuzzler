@@ -68,7 +68,7 @@ class QwenLLM:
         )
         
         self.model.eval()
-        print(f"✓ {model_name} loaded")
+        print(f" {model_name} loaded")
         
         # Emotion-aware prompts
         self.emotion_prompts = {
@@ -421,7 +421,7 @@ examples = """
 Example 1:
 User: "I'm so excited about my promotion!"
 Emotion: happy
-Response: "That's fantastic! Congratulations! You must feel amazing right now. 🐙"
+Response: "That's fantastic! Congratulations! You must feel amazing right now. "
 
 Example 2:
 User: "I've been feeling really lonely lately"
@@ -560,7 +560,7 @@ async def generate_with_fallback(
     # Fallback to canned responses
     if fallback_responses is None:
         fallback_responses = {
-            "happy": "That sounds wonderful! 🐙",
+            "happy": "That sounds wonderful! ",
             "sad": "I'm here for you.",
             "angry": "I understand your frustration.",
             "neutral": "Tell me more!",
@@ -624,7 +624,7 @@ def get_response_template(emotion: str, language: str) -> str:
     """Cache response templates"""
     
     templates = {
-        ("happy", "en"): "That's wonderful! 🐙",
+        ("happy", "en"): "That's wonderful! ",
         ("sad", "en"): "I'm here for you.",
     }
     
@@ -731,4 +731,4 @@ spec:
 - **Fallback:** Graceful degradation
 - **Production-ready:** Error handling + monitoring
 
-Perfect for empathic avatar responses! 🐙
+Perfect for empathic avatar responses! 

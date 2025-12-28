@@ -84,7 +84,7 @@ class TTSSynthesis:
             }
         }
         
-        print("✓ TTS models loaded")
+        print(" TTS models loaded")
     
     def _load_glow_tts(self):
         """Load Glow-TTS model"""
@@ -653,4 +653,4 @@ if __name__ == "__main__":
 - **Quality:** Natural-sounding speech
 - **Production-ready:** Error handling + fallbacks
 
-Perfect for emotional speech synthesis! 🐙
+Perfect for emotional speech synthesis! 

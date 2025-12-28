@@ -57,7 +57,7 @@ grep -A 20 "Traceback" logs/app.log
 
 ```
 2025-12-27 10:30:45.123 - stt_pipeline - DEBUG - Loading SenseVoiceSmall
-2025-12-27 10:30:46.500 - stt_pipeline - INFO - ✓ Model loaded
+2025-12-27 10:30:46.500 - stt_pipeline - INFO -  Model loaded
 2025-12-27 10:30:47.100 - stt_pipeline - WARNING - Audio quality: 0.75 (low)
 2025-12-27 10:30:48.200 - stt_pipeline - ERROR - STT failed: CUDA out of memory
 ```
@@ -102,7 +102,7 @@ def test_microphone():
         print(f"  Volume: {volume:.3f}")
         
         if volume < 0.01:
-            print("  ⚠️ WARNING: Very quiet!")
+            print("   WARNING: Very quiet!")
     
     stream.stop_stream()
     stream.close()
@@ -114,26 +114,26 @@ def test_microphone():
     print(f"Max amplitude: {np.max(np.abs(all_audio)):.3f}")
     
     if np.max(np.abs(all_audio)) < 0.1:
-        print("❌ Microphone is silent!")
+        print(" Microphone is silent!")
         print("Solutions:")
         print("  1. Check system audio input settings")
         print("  2. Try different audio device: stream = p.open(input_device_index=N)")
         print("  3. Check microphone permissions: sudo usermod -aG audio $USER")
         print("  4. Restart PulseAudio: pulseaudio -k")
     else:
-        print("✓ Microphone works!")
+        print(" Microphone works!")
 
 test_microphone()
 ```
 
 **Checklist:**
 ```
-☐ Microphone plugged in?
-☐ Microphone not muted?
-☐ System volume > 10%?
-☐ Input device set correctly?
-☐ ALSA/PulseAudio running?
-☐ Correct user permissions (audio group)?
+ Microphone plugged in?
+ Microphone not muted?
+ System volume > 10%?
+ Input device set correctly?
+ ALSA/PulseAudio running?
+ Correct user permissions (audio group)?
 ```
 
 ### 2. STT (Speech-to-Text) Issues
@@ -406,7 +406,7 @@ async def test_websocket():
     
     try:
         async with websockets.connect(uri) as websocket:
-            print("✓ Connected")
+            print(" Connected")
             
             # Test 1: Send simple message
             print("\nTest 1: Send message")
@@ -426,7 +426,7 @@ async def test_websocket():
                 )
                 print(f"  Received: {response}")
             except asyncio.TimeoutError:
-                print("  ✗ No response (timeout)")
+                print("   No response (timeout)")
             
             # Test 3: Send audio
             print("\nTest 3: Send audio chunk")
@@ -440,12 +440,12 @@ async def test_websocket():
             print(f"  Audio sent ({len(audio)} bytes)")
     
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
         print("\nChecklist:")
-        print("  ☐ Backend running? (python backend/main.py)")
-        print("  ☐ Port correct? (8000)")
-        print("  ☐ Firewall allows? (sudo ufw allow 8000)")
-        print("  ☐ CORS enabled?")
+        print("   Backend running? (python backend/main.py)")
+        print("   Port correct? (8000)")
+        print("   Firewall allows? (sudo ufw allow 8000)")
+        print("   CORS enabled?")
 
 asyncio.run(test_websocket())
 ```
@@ -493,33 +493,33 @@ async def debug_device():
     print("Test 1: Audio capture")
     try:
         await device.capture_audio(duration_ms=100)
-        print("  ✓ Audio captured")
+        print("   Audio captured")
     except Exception as e:
-        print(f"  ✗ Error: {e}")
+        print(f"   Error: {e}")
     
     # Test 2: WebSocket connection
     print("\nTest 2: WebSocket")
     try:
         await device.connect()
-        print("  ✓ Connected to backend")
+        print("   Connected to backend")
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
+        print(f"   Failed: {e}")
     
     # Test 3: Send audio
     print("\nTest 3: Send audio")
     try:
         await device.send_audio()
-        print("  ✓ Audio sent")
+        print("   Audio sent")
     except Exception as e:
-        print(f"  ✗ Error: {e}")
+        print(f"   Error: {e}")
     
     # Test 4: Receive response
     print("\nTest 4: Receive response")
     try:
         response = await device.receive_response(timeout=5)
-        print(f"  ✓ Got response: {len(response)} bytes")
+        print(f"   Got response: {len(response)} bytes")
     except Exception as e:
-        print(f"  ✗ Timeout: {e}")
+        print(f"   Timeout: {e}")
 
 asyncio.run(debug_device())
 ```
@@ -714,9 +714,9 @@ void test_microphone() {
     printf("Max amplitude: %d\n", max_val);
     
     if (max_val < 100) {
-        printf("✗ Microphone is silent!\n");
+        printf(" Microphone is silent!\n");
     } else {
-        printf("✓ Microphone works (max=%d)\n", max_val);
+        printf(" Microphone works (max=%d)\n", max_val);
     }
 }
 ```
@@ -818,18 +818,18 @@ http://localhost:8001/metrics
 ## Checklist: Before Production
 
 ```
-☐ All unit tests passing
-☐ Integration tests passing
-☐ Performance benchmarks met
-☐ Memory usage < 20GB
-☐ CPU load < 30% average
-☐ Audio quality verified
-☐ Latency < 500ms E2E
-☐ No memory leaks
-☐ Graceful error handling
-☐ Logging configured
-☐ Monitoring in place
-☐ Documentation updated
+ All unit tests passing
+ Integration tests passing
+ Performance benchmarks met
+ Memory usage < 20GB
+ CPU load < 30% average
+ Audio quality verified
+ Latency < 500ms E2E
+ No memory leaks
+ Graceful error handling
+ Logging configured
+ Monitoring in place
+ Documentation updated
 ```
 
 ---

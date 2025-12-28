@@ -442,4 +442,4 @@ def test_timing_distribution():
 - **PNG overlays** - easy rendering on device
 - **Production-ready** - tested and validated
 
-Perfect for perfect lip-sync! 🐙
+Perfect for perfect lip-sync! 

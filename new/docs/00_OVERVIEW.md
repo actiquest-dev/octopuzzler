@@ -3,47 +3,47 @@
 ## Vision
 
 Create an empathic AI avatar for WowCube that can:
-- ✅ Understand user speech (STT)
-- ✅ Recognize emotions in voice
-- ✅ Detect user's language
-- ✅ Generate intelligent responses (LLM)
-- ✅ Synthesize emotional voice (TTS)
-- ✅ Animate expressions in real-time
-- ✅ All in REAL-TIME (<150ms latency)
+-  Understand user speech (STT)
+-  Recognize emotions in voice
+-  Detect user's language
+-  Generate intelligent responses (LLM)
+-  Synthesize emotional voice (TTS)
+-  Animate expressions in real-time
+-  All in REAL-TIME (<150ms latency)
 
 ---
 
 ## What You Get
 
 ```
-🎯 FEATURES:
-  ✅ Real-time speech recognition (50+ languages)
-  ✅ Speech emotion recognition (5 emotions)
-  ✅ Language detection (50+ languages)
-  ✅ AI conversation (Qwen LLM)
-  ✅ Emotional voice synthesis (TTS)
-  ✅ Synchronized mouth/eye animations
-  ✅ Empathic responses based on user emotion
+ FEATURES:
+   Real-time speech recognition (50+ languages)
+   Speech emotion recognition (5 emotions)
+   Language detection (50+ languages)
+   AI conversation (Qwen LLM)
+   Emotional voice synthesis (TTS)
+   Synchronized mouth/eye animations
+   Empathic responses based on user emotion
 
-⚡ PERFORMANCE:
-  ✅ 100-150ms latency per audio chunk
-  ✅ 85-90% speech recognition accuracy
-  ✅ 80-85% emotion recognition accuracy
-  ✅ 95%+ language detection accuracy
-  ✅ Real-time capable (no buffering)
+ PERFORMANCE:
+   100-150ms latency per audio chunk
+   85-90% speech recognition accuracy
+   80-85% emotion recognition accuracy
+   95%+ language detection accuracy
+   Real-time capable (no buffering)
 
-💰 COST:
-  ✅ $85/month infrastructure (Modal GPU)
-  ✅ 4x cheaper than separate models
-  ✅ Scales to 100-1000+ concurrent users
-  ✅ No vendor lock-in (open source)
+ COST:
+   $85/month infrastructure (Modal GPU)
+   4x cheaper than separate models
+   Scales to 100-1000+ concurrent users
+   No vendor lock-in (open source)
 
-🏗️ ARCHITECTURE:
-  ✅ Production-ready microservices
-  ✅ Docker containerized
-  ✅ Kubernetes ready
-  ✅ CI/CD automated
-  ✅ Fully documented
+ ARCHITECTURE:
+   Production-ready microservices
+   Docker containerized
+   Kubernetes ready
+   CI/CD automated
+   Fully documented
 ```
 
 ---
@@ -215,7 +215,7 @@ vs Separate models:
   Coordination overhead:     +20%
   TOTAL:                     $150-200/month
   
-SAVINGS: 50-75%! ✅
+SAVINGS: 50-75%! 
 ```
 
 ---
@@ -360,30 +360,30 @@ WowCube-Octopus-Avatar/
 ## Key Decisions
 
 ### Why SenseVoiceSmall?
-✅ One model = STT + Emotion + Language  
-✅ 1.5GB VRAM (vs 6GB+ for separate)  
-✅ 100-150ms latency  
-✅ 90% accuracy  
-✅ 50+ languages  
+ One model = STT + Emotion + Language  
+ 1.5GB VRAM (vs 6GB+ for separate)  
+ 100-150ms latency  
+ 90% accuracy  
+ 50+ languages  
 
 ### Why Qwen?
-✅ Fast inference  
-✅ Multilingual support  
-✅ Cost-effective  
-✅ Open source  
-✅ Easy to fine-tune  
+ Fast inference  
+ Multilingual support  
+ Cost-effective  
+ Open source  
+ Easy to fine-tune  
 
 ### Why Modal.com?
-✅ $85/month for A10G GPU  
-✅ Auto-scaling  
-✅ Serverless deployment  
-✅ No infrastructure setup needed  
+ $85/month for A10G GPU  
+ Auto-scaling  
+ Serverless deployment  
+ No infrastructure setup needed  
 
 ### Why Custom Animation System?
-✅ BK7258 has limited resources  
-✅ GIF + PNG overlay is efficient  
-✅ Parametric eyes = realistic emotions  
-✅ Frame-perfect synchronization  
+ BK7258 has limited resources  
+ GIF + PNG overlay is efficient  
+ Parametric eyes = realistic emotions  
+ Frame-perfect synchronization  
 
 ---
 
@@ -452,7 +452,7 @@ MIT License - See [LICENSE](../LICENSE)
 
 ## Status
 
-🟢 **MVP Phase** - Ready for development (Week 1-4)
+ **MVP Phase** - Ready for development (Week 1-4)
 
 ---
 

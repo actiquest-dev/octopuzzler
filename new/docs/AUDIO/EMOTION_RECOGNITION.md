@@ -426,4 +426,4 @@ asyncio.run(test())
 - **Tracking:** Monitor emotion trends over time
 - **Simple:** Works out-of-the-box, no extra setup needed
 
-Emotion recognition is already solved with SenseVoiceSmall! ✅
+Emotion recognition is already solved with SenseVoiceSmall! 

@@ -17,10 +17,10 @@ PROBLEM with separate models:
 SOLUTION with SenseVoiceSmall:
 ┌──────────────────────────────────────┐
 │ SenseVoiceSmall: 1.5GB VRAM          │
-│ ✅ STT (speech recognition)          │
-│ ✅ Emotion (5 classes)               │
-│ ✅ Language detection (50+ langs)    │
-│ ✅ All in ONE model!                 │
+│  STT (speech recognition)          │
+│  Emotion (5 classes)               │
+│  Language detection (50+ langs)    │
+│  All in ONE model!                 │
 ├──────────────────────────────────────┤
 │ TOTAL: 1.5GB VRAM (4x less!)         │
 │ Latency: 200-300ms for ALL tasks     │
@@ -185,7 +185,7 @@ class SenseVoiceProcessor:
             "ko": "korean",
         }
         
-        print(f"✓ Loaded SenseVoiceSmall (1.5GB VRAM)")
+        print(f" Loaded SenseVoiceSmall (1.5GB VRAM)")
     
     async def process_audio(
         self,
@@ -523,7 +523,7 @@ T0-100ms:     SenseVoiceSmall processes:
               ├─ Emotion recognition
               └─ Language detection
               
-T100ms:       All results ready! ✅
+T100ms:       All results ready! 
               ├─ Text: "Hello!"
               ├─ Emotion: 0.85 happy
               └─ Language: 0.95 english
@@ -540,11 +540,11 @@ Separate pipeline:
 ├─ STT (Whisper): 50-100ms
 ├─ Emotion (Wav2Vec): 30-100ms
 ├─ Language (detect-language): 20-50ms
-└─ If sequential: 100-250ms ❌
+└─ If sequential: 100-250ms 
 
 SenseVoiceSmall:
 ├─ All 3 in ONE model
-└─ 100-150ms for everything ✅
+└─ 100-150ms for everything 
 
 ADVANTAGE: Simpler, faster, less VRAM!
 ```
@@ -580,7 +580,7 @@ vs Separate models:
   Total: 6GB+ VRAM
   
   SenseVoice: 1.5GB VRAM (4x less!)
-  Cost savings: ~75% ✅
+  Cost savings: ~75% 
 
 HARDWARE OPTIONS:
 ═════════════════════════════════════════════════════════════
@@ -633,15 +633,15 @@ async def test_sensevoice():
     print("=" * 60)
     print("SENSEVOICE RESULTS")
     print("=" * 60)
-    print(f"\n📝 Text: {result.text}")
-    print(f"⏱️  Latency: {result.latency_ms:.0f}ms")
+    print(f"\n Text: {result.text}")
+    print(f"  Latency: {result.latency_ms:.0f}ms")
     
-    print(f"\n😊 Emotion: {result.emotion}")
+    print(f"\n Emotion: {result.emotion}")
     for emotion, score in result.emotion_scores.items():
         bar = "█" * int(score * 20)
         print(f"  {emotion:10s} {score:.2f} {bar}")
     
-    print(f"\n🌍 Language: {result.language}")
+    print(f"\n Language: {result.language}")
     for lang, score in result.language_scores.items():
         bar = "█" * int(score * 20)
         print(f"  {lang:10s} {score:.2f} {bar}")
@@ -724,7 +724,7 @@ class FullPipeline:
     
     async def call_llm(self, prompt: str) -> str:
         # Implement actual LLM call
-        return "That's wonderful! 🐙"
+        return "That's wonderful! "
     
     async def generate_tts(self, text: str, emotion: str) -> Tuple[bytes, int]:
         # Implement TTS
@@ -737,22 +737,22 @@ class FullPipeline:
 
 ```
 SINGLE MODEL (SenseVoiceSmall):
-✅ 1.5GB VRAM (vs 6GB+ for separate)
-✅ 100-150ms latency
-✅ Single inference call
-✅ Shared encoder (efficiency!)
-✅ Unified pipeline
-✅ 4x cost savings
-✅ Easy deployment
+ 1.5GB VRAM (vs 6GB+ for separate)
+ 100-150ms latency
+ Single inference call
+ Shared encoder (efficiency!)
+ Unified pipeline
+ 4x cost savings
+ Easy deployment
 
 SEPARATE MODELS (Whisper + Wav2Vec + Language detect):
-❌ 6GB+ VRAM needed
-❌ 150-250ms latency (if sequential)
-❌ 3 separate inference calls
-❌ No shared computation
-❌ Complex pipeline
-❌ More expensive
-❌ Harder to maintain
+ 6GB+ VRAM needed
+ 150-250ms latency (if sequential)
+ 3 separate inference calls
+ No shared computation
+ Complex pipeline
+ More expensive
+ Harder to maintain
 ```
 
 ---
@@ -831,13 +831,13 @@ if len(monitor.latencies) % 100 == 0:
 ## Summary: Why SenseVoiceSmall is Perfect for You
 
 ```
-✅ UNIFIED: STT + Emotion + Language in ONE model
-✅ FAST: 100-150ms per chunk
-✅ SMALL: 1.5GB VRAM (4x less than separate models)
-✅ CHEAP: $85/month (4x cheaper than separate)
-✅ ACCURATE: 85-90% ASR, 80-85% emotion, 95%+ language
-✅ MULTILINGUAL: 50+ languages supported
-✅ PRODUCTION-READY: Stable, well-tested model
+ UNIFIED: STT + Emotion + Language in ONE model
+ FAST: 100-150ms per chunk
+ SMALL: 1.5GB VRAM (4x less than separate models)
+ CHEAP: $85/month (4x cheaper than separate)
+ ACCURATE: 85-90% ASR, 80-85% emotion, 95%+ language
+ MULTILINGUAL: 50+ languages supported
+ PRODUCTION-READY: Stable, well-tested model
 
 USE CASE PERFECT FOR:
   • Real-time octopus avatar

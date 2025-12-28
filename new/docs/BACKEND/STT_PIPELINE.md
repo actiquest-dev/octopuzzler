@@ -77,7 +77,7 @@ class STTPipeline:
             ).to(device)
         
         self.model.eval()
-        print("✓ SenseVoiceSmall loaded")
+        print(" SenseVoiceSmall loaded")
     
     async def process_chunk(
         self,
@@ -529,14 +529,14 @@ Total latency:              150-240ms
 
 ## Key Features
 
-✅ **Unified model** - STT + Emotion + Language in one forward pass
-✅ **Fast** - 100-150ms per chunk
-✅ **Multilingual** - 50+ languages
-✅ **Accurate** - 85-90% for speech recognition
-✅ **Error handling** - Retry logic + fallbacks
-✅ **Monitoring** - Real-time performance metrics
-✅ **WebSocket** - Streaming processing
-✅ **Buffering** - Smooth continuous processing
+ **Unified model** - STT + Emotion + Language in one forward pass
+ **Fast** - 100-150ms per chunk
+ **Multilingual** - 50+ languages
+ **Accurate** - 85-90% for speech recognition
+ **Error handling** - Retry logic + fallbacks
+ **Monitoring** - Real-time performance metrics
+ **WebSocket** - Streaming processing
+ **Buffering** - Smooth continuous processing
 
 ## Deployment
 
@@ -557,4 +557,4 @@ SenseVoiceSmall provides complete STT solution:
 - All in one model (1.5GB VRAM)
 - Real-time processing (100-150ms)
 
-Perfect for your empathic octopus avatar! 🐙
+Perfect for your empathic octopus avatar! 

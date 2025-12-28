@@ -72,12 +72,12 @@ docker run --gpus all -p 8000:8000 octopus-avatar
 python3 test_stt.py
 
 # Expected output:
-# ✓ STT: "Hello world"
-# ✓ Emotion: happy (0.85)
-# ✓ Language: en (0.96)
-# ✓ Response: "That's wonderful!"
-# ✓ Audio synthesized: 2000ms
-# ✓ Animations: 8 phonemes
+#  STT: "Hello world"
+#  Emotion: happy (0.85)
+#  Language: en (0.96)
+#  Response: "That's wonderful!"
+#  Audio synthesized: 2000ms
+#  Animations: 8 phonemes
 ```
 
 ## Step 5: Connect Device Simulator (3 minutes)
@@ -101,7 +101,7 @@ from llm_integration import QwenLLM
 from tts_synthesis import TTSSynthesis
 
 async def test_pipeline():
-    print("🚀 Starting quick test...")
+    print(" Starting quick test...")
     
     # Initialize services
     stt = STTPipeline()
@@ -113,13 +113,13 @@ async def test_pipeline():
     audio = np.zeros(1600, dtype=np.int16).tobytes()
     
     # 1. STT
-    print("📝 Testing STT...")
+    print(" Testing STT...")
     result_stt = await stt.process_chunk(audio)
     print(f"   Text: {result_stt['text']}")
     print(f"   Emotion: {result_stt['emotion']}")
     
     # 2. LLM
-    print("🤖 Testing LLM...")
+    print(" Testing LLM...")
     result_llm = await llm.generate_response(
         user_text="Hello!",
         emotion=result_stt['emotion']
@@ -127,14 +127,14 @@ async def test_pipeline():
     print(f"   Response: {result_llm['text']}")
     
     # 3. TTS
-    print("🔊 Testing TTS...")
+    print(" Testing TTS...")
     audio_bytes, duration = await tts.synthesize(
         text=result_llm['text'],
         emotion=result_llm['emotion']
     )
     print(f"   Audio: {duration}ms")
     
-    print("✅ All tests passed!")
+    print(" All tests passed!")
 
 if __name__ == "__main__":
     asyncio.run(test_pipeline())
@@ -295,15 +295,15 @@ Solution:
 python3 utils/benchmark.py
 
 Expected results:
-  STT latency:      100-150ms ✓
-  LLM latency:      50-200ms ✓
-  TTS latency:      100-150ms ✓
-  Animation:        10-20ms ✓
-  Total E2E:        300-400ms ✓
+  STT latency:      100-150ms 
+  LLM latency:      50-200ms 
+  TTS latency:      100-150ms 
+  Animation:        10-20ms 
+  Total E2E:        300-400ms 
   
-  Memory (GPU):     ~18GB ✓
-  Memory (RAM):     ~2GB ✓
-  CPU load:         15-25% ✓
+  Memory (GPU):     ~18GB 
+  Memory (RAM):     ~2GB 
+  CPU load:         15-25% 
 ```
 
 ## Next Steps
@@ -395,7 +395,7 @@ Hardware:
 - [ ] First API call successful
 - [ ] Documentation reviewed
 
-**You're ready to develop! 🚀**
+**You're ready to develop! **
 
 ---
 
