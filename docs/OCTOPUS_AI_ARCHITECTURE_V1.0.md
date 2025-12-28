@@ -293,7 +293,7 @@ CUDA: 12.2
 
 **Purpose**: Speech-to-text + audio emotion detection
 
-**Implementation**: See [code/backend/services/sensevoice_service.py](code/backend/services/sensevoice_service.py)
+**Implementation**: See [code/backend/services/sensevoice_service.py](../code/backend/services/sensevoice_service.py)
 
 ```python
 # Simplified overview
@@ -326,7 +326,7 @@ class SenseVoiceService:
 
 **Purpose**: Visual emotion detection from face images
 
-**Implementation**: See [code/backend/services/emovit_service.py](code/backend/services/emovit_service.py)
+**Implementation**: See [code/backend/services/emovit_service.py](../code/backend/services/emovit_service.py)
 
 ```python
 class EmoVITService:
@@ -360,7 +360,7 @@ class EmoVITService:
 
 **Purpose**: Identify users and load personalized profiles
 
-**Implementation**: See [code/backend/services/face_recognition_service.py](code/backend/services/face_recognition_service.py)
+**Implementation**: See [code/backend/services/face_recognition_service.py](../code/backend/services/face_recognition_service.py)
 
 ```python
 class FaceRecognitionService:
@@ -455,13 +455,13 @@ class FaceRecognitionService:
 - Accuracy: 99.8% @ FAR=0.01% (LFW benchmark)
 - Privacy: Only stores 512-dim embeddings (cannot reverse to image)
 
-**User Database Schema**: See [code/backend/models/user_database.py](code/backend/models/user_database.py)
+**User Database Schema**: See [code/backend/models/user_database.py](../code/backend/models/user_database.py)
 
 ## 3.5 Emotion Fusion Service
 
 **Purpose**: Merge audio and vision emotion sources with context-aware weighting
 
-**Implementation**: See [code/backend/services/emotion_fusion_service.py](code/backend/services/emotion_fusion_service.py)
+**Implementation**: See [code/backend/services/emotion_fusion_service.py](../code/backend/services/emotion_fusion_service.py)
 
 ```python
 class EmotionFusionService:
@@ -534,7 +534,7 @@ Apply temporal smoothing (30% from previous frame)
 
 **Purpose**: Generate contextual responses with user personalization
 
-**Implementation**: See [code/backend/services/qwen_service.py](code/backend/services/qwen_service.py)
+**Implementation**: See [code/backend/services/qwen3_vl_service.py](../code/backend/services/qwen3_vl_service.py)
 
 ```python
 class QwenService:
@@ -600,7 +600,7 @@ Guidelines:
 
 **Purpose**: Text-to-speech with word-level timestamps and emotion conditioning
 
-**Implementation**: See [code/backend/services/dia2_service.py](code/backend/services/dia2_service.py)
+**Implementation**: See [code/backend/services/dia2_service.py](../code/backend/services/dia2_service.py)
 
 ```python
 class DIA2Service:
@@ -672,7 +672,7 @@ class DIA2Service:
 
 **Purpose**: Convert text + word timestamps → mouth shapes + animation commands
 
-**Implementation**: See [code/backend/services/animation_sync_service.py](code/backend/services/animation_sync_service.py)
+**Implementation**: See [code/backend/services/animation_sync_service.py](../code/backend/services/animation_sync_service.py)
 
 ```python
 class AnimationSyncService:
@@ -794,7 +794,7 @@ class AnimationSyncService:
         return markers
 ```
 
-**Phoneme Mapping**: See [code/backend/services/phoneme_mapping.py](code/backend/services/phoneme_mapping.py)
+**Phoneme Mapping**: See [code/backend/services/phoneme_mapping.py](../code/backend/services/phoneme_mapping.py)
 
 ```python
 PHONEME_TO_MOUTH_SHAPE = {
@@ -829,7 +829,7 @@ PHONEME_TO_MOUTH_SHAPE = {
 
 **Purpose**: Coordinate all services, handle WebRTC communication
 
-**Implementation**: See [code/backend/services/rtc_gateway.py](code/backend/services/rtc_gateway.py)
+**Implementation**: See [code/backend/rtc_gateway.py](../code/backend/rtc_gateway.py)
 
 ```python
 class OctopusRTCGateway:
@@ -951,7 +951,7 @@ class OctopusRTCGateway:
         session.last_vision_emotion = vision_emotion
 ```
 
-**Session State**: See [code/backend/models/session_state.py](code/backend/models/session_state.py)
+**Session State**: See [code/backend/models/session_state.py](../code/backend/models/session_state.py)
 
 ```python
 @dataclass
@@ -1612,7 +1612,7 @@ class ErrorRecovery:
 
 ### Wake Word Detection
 
-**Implementation**: See [code/device/session/wake_word_detector.cpp](code/device/session/wake_word_detector.cpp)
+**Implementation**: See [code/device/session/wake_word_detector.cpp](../code/device/session/wake_word_detector.cpp)
 
 ```cpp
 class WakeWordDetector {
@@ -1676,7 +1676,7 @@ private:
 
 ### Accelerometer Trigger
 
-**Implementation**: See [code/device/session/accelerometer.cpp](code/device/session/accelerometer.cpp)
+**Implementation**: See [code/device/session/accelerometer.cpp](../code/device/session/accelerometer.cpp)
 
 ```cpp
 class AccelerometerTrigger {
@@ -1774,7 +1774,7 @@ private:
 
 ## 6.2 Session Manager
 
-**Implementation**: See [code/device/session/session_manager.cpp](code/device/session/session_manager.cpp)
+**Implementation**: See [code/device/session/session_manager.cpp](../code/device/session/session_manager.cpp)
 
 ```cpp
 class SessionManager {
@@ -2014,7 +2014,7 @@ private:
 
 ## 7.3 Build Configuration
 
-**CMakeLists.txt**: See [code/device/CMakeLists.txt](code/device/CMakeLists.txt)
+**CMakeLists.txt**: See [code/device/CMakeLists.txt](../code/device/CMakeLists.txt)
 
 ```cmake
 # ThorVG Configuration for BK7258
@@ -2054,7 +2054,7 @@ target_link_libraries(avatar_component thorvg)
 
 ## 7.4 Octopus Procedural Generation
 
-**Implementation**: See [code/device/avatar/octopus_avatar.cpp](code/device/avatar/octopus_avatar.cpp)
+**Implementation**: See [code/device/avatar/octopus_avatar.cpp](../code/device/avatar/octopus_avatar.cpp)
 
 ```cpp
 class OctopusAvatar {
@@ -2302,7 +2302,7 @@ const OctopusAvatar::ColorScheme OctopusAvatar::EMOTION_COLORS[] = {
 
 ## 7.5 Mouth Shapes (8 Phoneme Forms)
 
-**Implementation**: See [code/device/avatar/mouth_shapes.cpp](code/device/avatar/mouth_shapes.cpp)
+**Implementation**: See [code/device/avatar/mouth_shapes.cpp](../code/device/avatar/mouth_shapes.cpp)
 
 ```cpp
 class MouthShapes {
@@ -2455,7 +2455,7 @@ private:
 
 ## 7.6 Eyes with Gaze Control
 
-**Implementation**: See [code/device/avatar/eyes.cpp](code/device/avatar/eyes.cpp)
+**Implementation**: See [code/device/avatar/eyes.cpp](../code/device/avatar/eyes.cpp)
 
 ```cpp
 class Eyes {
@@ -2525,7 +2525,7 @@ private:
 
 ## 7.7 Dual-Mode Eyes (Local + Backend)
 
-**Implementation**: See [code/device/avatar/dual_mode_eyes.cpp](code/device/avatar/dual_mode_eyes.cpp)
+**Implementation**: See [code/device/avatar/dual_mode_eyes.cpp](../code/device/avatar/dual_mode_eyes.cpp)
 
 ```cpp
 class DualModeEyes : public Eyes {
@@ -2624,7 +2624,7 @@ private:
 
 ## 7.8 Complete Avatar Application
 
-**Implementation**: See [code/device/main/avatar_app.cpp](code/device/main/avatar_app.cpp)
+**Implementation**: See [code/device/main/avatar_app.cpp](../code/device/main/avatar_app.cpp)
 
 ```cpp
 class AvatarApplication {
@@ -2989,7 +2989,7 @@ private:
 
 ## 8.3 BlazeFace Detector
 
-**Implementation**: See [code/device/tracking/blazeface_detector.cpp](code/device/tracking/blazeface_detector.cpp)
+**Implementation**: See [code/device/tracking/blazeface_detector.cpp](../code/device/tracking/blazeface_detector.cpp)
 
 ```cpp
 class BlazeFaceDetector {
@@ -3154,7 +3154,7 @@ struct FaceDetection {
 
 ## 8.4 MediaPipe Face Mesh
 
-**Implementation**: See [code/device/tracking/mediapipe_facemesh.cpp](code/device/tracking/mediapipe_facemesh.cpp)
+**Implementation**: See [code/device/tracking/mediapipe_facemesh.cpp](../code/device/tracking/mediapipe_facemesh.cpp)
 
 ```cpp
 class MediaPipeFaceMesh {
@@ -3264,7 +3264,7 @@ struct FaceLandmarks {
 
 ## 8.5 Gaze Calculation
 
-**Implementation**: See [code/device/tracking/gaze_calculator.cpp](code/device/tracking/gaze_calculator.cpp)
+**Implementation**: See [code/device/tracking/gaze_calculator.cpp](../code/device/tracking/gaze_calculator.cpp)
 
 ```cpp
 class GazeCalculator {
@@ -3335,7 +3335,7 @@ private:
 
 ## 8.6 Gaze Smoothing Filter
 
-**Implementation**: See [code/device/tracking/gaze_filter.cpp](code/device/tracking/gaze_filter.cpp)
+**Implementation**: See [code/device/tracking/gaze_filter.cpp](../code/device/tracking/gaze_filter.cpp)
 
 ```cpp
 class GazeFilter {
@@ -3389,7 +3389,7 @@ private:
 
 ## 8.7 Optimized Eye Tracker (5 FPS)
 
-**Implementation**: See [code/device/tracking/eye_tracking_optimized.cpp](code/device/tracking/eye_tracking_optimized.cpp)
+**Implementation**: See [code/device/tracking/eye_tracking_optimized.cpp](../code/device/tracking/eye_tracking_optimized.cpp)
 
 ```cpp
 class OptimizedEyeTracker {
@@ -3561,7 +3561,7 @@ private:
 
 ## 8.8 Camera Task (CPU1)
 
-**Implementation**: See [code/device/tracking/camera_task.cpp](code/device/tracking/camera_task.cpp)
+**Implementation**: See [code/device/tracking/camera_task.cpp](../code/device/tracking/camera_task.cpp)
 
 ```cpp
 void camera_task(void* param) {
@@ -3747,7 +3747,7 @@ private:
 
 ## 9.3 InsightFace Service
 
-**Implementation**: See [code/backend/services/face_recognition_service.py](code/backend/services/face_recognition_service.py)
+**Implementation**: See [code/backend/services/face_recognition_service.py](../code/backend/services/face_recognition_service.py)
 
 ```python
 import insightface
@@ -4197,7 +4197,7 @@ async def delete_user(user_id: str):
 
 ## 9.4 User Database Schema
 
-**Implementation**: See [code/backend/models/user_database.py](code/backend/models/user_database.py)
+**Implementation**: See [code/backend/models/user_database.py](../code/backend/models/user_database.py)
 
 ```python
 from dataclasses import dataclass, field
@@ -4425,7 +4425,7 @@ Scalability:
 
 ## 9.6 Integration with Session
 
-**Updated RTC Gateway**: See [code/backend/services/rtc_gateway.py](code/backend/services/rtc_gateway.py)
+**Updated RTC Gateway**: See [code/backend/rtc_gateway.py](../code/backend/rtc_gateway.py)
 
 ```python
 class OctopusRTCGateway:
@@ -4512,7 +4512,7 @@ class OctopusRTCGateway:
 
 ## 9.7 User Management CLI
 
-**Implementation**: See [code/backend/tools/user_management.py](code/backend/tools/user_management.py)
+**Implementation**: See [code/backend/tools/user_management.py](../code/backend/tools/user_management.py)
 
 ```python
 #!/usr/bin/env python3
