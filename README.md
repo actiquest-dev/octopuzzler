@@ -1,94 +1,409 @@
-# Octopus AI - Project Overview
+# WowCube Empatic Assistant MVP - Техническая спецификация
 
-## Overview
+## Обзор системы
 
-Octopus AI is a hybrid device and backend system for a real-time avatar assistant.
-The device handles session triggers, face detection, eye tracking, and rendering.
-The backend handles face recognition, speech processing, and animation commands.
-
-Key goals:
-- Fast greeting after user presence detection.
-- Low-latency local eye tracking.
-- Streaming audio and animation back to the device.
-
-Full architecture details are in `docs/OCTOPUS_AI_ARCHITECTURE_V1.0.md`.
+WowCube Empatic Assistant представляет собой мультимодальную систему речевого взаимодействия с эмоциональным 2D аватаром для платформы WowCube. Система обеспечивает естественный диалог с мгновенными ответами (latency <50мс) благодаря предиктивной обработке и streaming архитектуре.
 
 ---
 
-## Current Architecture (Summary)
+## Архитектура системы
 
-### Device (BK7258)
-- Session triggers: wake word, accelerometer, button.
-- Face detection: BlazeFace (device-side).
-- Eye tracking: MediaPipe (device-side).
-- Rendering: ThorVG-based avatar and lip sync.
-- Transport: RTC/WebSocket.
+### Компоненты WowCube модуля:
+- **Камера**: 640x480 @ 2-3 FPS
+- **Микрофон**: Дуплексное аудио через BLE 5.x
+- **Экран**: ThorVG аватар рендеринг
+- **Связь**: BLE 5.x → IP контроллер → сервер
 
-### Backend (GPU)
-- Face recognition: InsightFace + FAISS.
-- Speech pipeline: SenseVoice (STT + audio emotion) -> Qwen (LLM) -> DIA2 (TTS).
-- Animation sync: phoneme timing, gaze, blink markers.
-- Event graph storage: FalkorDB.
-
----
-
-## Data Storage (FalkorDB)
-
-LightRAG is no longer used. We store user history and behavior in FalkorDB as an
-event graph. Each user has a graph of actions and events with timestamps.
-
-Example event nodes:
-- SessionStart
-- FaceRecognized
-- AudioChunk
-- EmotionDetected
-- LLMResponse
-- TTSAudio
-- AnimationCommand
-
-Example edges:
-- USER -> SessionStart
-- SessionStart -> AudioChunk
-- AudioChunk -> EmotionDetected
-- EmotionDetected -> LLMResponse
-- LLMResponse -> TTSAudio
-- TTSAudio -> AnimationCommand
-
-This graph supports fast history lookup, personalization, and analytics.
+### Серверные компоненты:
+1. **FalkorDB** - event граф действий и событий пользователей
+2. **EmoVIT** - анализ эмоций по лицу
+3. **SenseVoiceSmall** - распознавание речи и эмоций голоса
+4. **Dia** - синтез речи с эмоциями
+5. **Jamba 1.5** - генерация диалогов (через OpenRouter)
 
 ---
 
-## Repository Structure
+## Детальное описание компонентов
 
-```
-docs/
-  OCTOPUS_AI_ARCHITECTURE_V1.0.md
-  ADDENDUM_QWEN3VL_V1.1.md
-  API_REFERENCE.md
-  DEPLOYMENT_GUIDE.md
-  TROUBLESHOOTING.md
+### 1. Система детекции активности
 
-code/
-  backend/
-  device/
+**Детектор движения/лица**
+- **Назначение**: Энергосберегающий режим камеры
+- **Алгоритм**: Простая детекция движения + базовое распознавание лиц
+- **Производительность**: 1-5мс обработки на кадр
+- **Энергопотребление**: Минимальное, работает постоянно
 
-scripts/
-tests/
-```
+**VAD (Voice Activity Detector)**
+- **Назначение**: Детекция начала речи пользователя
+- **Алгоритм**: Анализ энергии сигнала + спектральные признаки
+- **Задержка**: 5-20мс
+- **Точность**: >95% детекции речи vs тишина/шум
+
+### 2. Идентификация и профилирование
+
+**Face ID**
+- **Модель**: Основана на ArcFace/FaceNet
+- **Задача**: Распознавание пользователя по лицу
+- **Время обработки**: 50-100мс на кадр 640x480
+- **Точность**: >99% для зарегистрированных пользователей
+- **База данных**: Эталоны лиц в векторном виде (512 dim)
+
+**Система профилей**
+- **Новый пользователь**: Создание профиля + сохранение эталона
+- **Существующий**: Загрузка истории и предпочтений
+- **Хранение**: FalkorDB event граф с узлами пользователей
+
+### 3. Эмоциональный анализ
+
+**EmoVIT (Emotion Vision Transformer)**
+- **Архитектура**: Vision Transformer для детекции эмоций
+- **Входные данные**: RGB кадры 640x480
+- **Выходные данные**: 7 базовых эмоций + интенсивность (0-1)
+- **Производительность**: 100-200мс на кадр
+- **Память**: ~2GB VRAM
+
+**SenseVoiceSmall**
+- **Мультитаск**: ASR + эмоции голоса + детекция языка
+- **Архитектура**: Encoder-Decoder с attention
+- **Поддержка языков**: 50+ языков
+- **Эмоции**: Радость, грусть, злость, нейтральность, удивление
+- **Производительность**: 200-300мс на 3-5 сек аудио
+- **Память**: ~1.5GB VRAM
+
+### 4. База знаний и контекст
+
+**FalkorDB event граф**
+- **Технология**: FalkorDB (graph database)
+- **Хранение**: Event граф действий и событий пользователя
+- **Структура данных**:
+  - Пользователи: узлы USER
+  - Сессии: SessionStart/SessionEnd
+  - События: EmotionDetected, AudioChunk, LLMResponse, TTSAudio
+  - Связи: USER -> SessionStart -> AudioChunk -> EmotionDetected
+- **Операции**:
+  - Поиск контекста сессии: 5-15мс
+  - Обновление профиля: 20-50мс
+  - Быстрые запросы по истории: 10-30мс
+- **Память**: ~2-4GB RAM
+
+### 5. Предиктивная обработка
+
+**Быстрый FalkorDB запрос**
+- **Триггер**: Начало речи пользователя (VAD)
+- **Время работы**: Параллельно с речью (1-3 секунды)
+- **Компоненты**:
+  - Быстрый FalkorDB запрос событий и эмоций
+  - Анализ первых слов для предсказания темы
+  - Подготовка контекста из истории диалогов
+
+**Генерация шаблонов ответов**
+- **Количество**: 3-5 вариантов ответа
+- **Типы**: Приветствие, вопрос, эмоциональная поддержка, информативный, casual
+- **Время генерации**: 100-300мс
+- **Критерий выбора**: Соответствие эмоциональному состоянию + контексту
+
+### 6. Генерация диалогов
+
+**Jamba 1.5 (через OpenRouter)**
+- **Модель**: Jamba-1.5-Mini (12B параметров)
+- **Архитектура**: Hybrid Mamba SSM + Transformer
+- **API**: OpenRouter REST/WebSocket
+- **Время первого токена**: 20-50мс
+- **Streaming скорость**: 100-200 токенов/сек
+- **Контекст**: До 32K токенов (история диалогов)
+
+**Выбор шаблона**
+- **Время**: 5мс после окончания речи
+- **Алгоритм**: Сравнение полученного текста с подготовленными шаблонами
+- **Критерии**: Семантическая близость + эмоциональное соответствие
+
+### 7. Мультимодальный вывод
+
+**Dia TTS**
+- **Технология**: Neural vocoder с эмоциональными метками
+- **Входные данные**: Текст + теги эмоций + скорость + тембр
+- **Выходные данные**: PCM аудиопоток 16kHz/16bit
+- **Задержка**: 50мс до начала озвучивания
+- **Streaming**: Генерация по мере поступления текста
+- **Производительность**: 300-800мс на предложение
+- **Память**: ~3GB VRAM
+
+**ThorVG Avatar (локально на WowCube)**
+- **Технология**: ThorVG procedural rendering
+- **Входные данные**: Скрипт анимации (теги эмоций + текст для lip-sync)
+- **Рендеринг**: 30-60 FPS
+- **Анимации**: Лицевая мимика, движения глаз, lip-sync
+- **Размер скрипта**: 10-20 КБ (вместо видеопотока)
+
+### 8. Коррекция и синхронизация
+
+**Streaming коррекция**
+- **Процесс**: TTS начинается с шаблона, корректируется по мере генерации Jamba
+- **Синхронизация**: Аудио и ThorVG анимация
+- **Буферизация**: Минимальная (50-100мс) для плавности
 
 ---
 
-## Key Docs
+## Требования к оборудованию
 
-- Architecture: `docs/OCTOPUS_AI_ARCHITECTURE_V1.0.md`
-- Addendum: `docs/ADDENDUM_QWEN3VL_V1.1.md`
-- API: `docs/API_REFERENCE.md`
-- Deployment: `docs/DEPLOYMENT_GUIDE.md`
-- Troubleshooting: `docs/TROUBLESHOOTING.md`
+### Сервер конфигурация
+
+#### GPU сервер (основной)
+**Минимальные требования (с FalkorDB):**
+- **GPU**: NVIDIA RTX 4070 12GB или RTX 4060 Ti 16GB
+- **CPU**: Intel i7-13700K или AMD Ryzen 7 7700X (8+ cores)
+- **RAM**: 32GB DDR4
+- **SSD**: 1TB NVMe для FalkorDB данных и снапшотов
+- **Сеть**: 1Gbps Ethernet
+
+**Рекомендуемые требования:**
+- **GPU**: NVIDIA A100 80GB или H100
+- **CPU**: Intel Xeon Gold 6348 или AMD EPYC 7543 (28+ cores)
+- **RAM**: 128GB DDR4
+- **SSD**: 4TB NVMe RAID0
+- **Сеть**: 25Gbps Ethernet
+
+#### Распределение нагрузки на GPU:
+- **EmoVIT**: ~2GB VRAM
+- **SenseVoiceSmall**: ~1.5GB VRAM  
+- **Dia TTS**: ~3GB VRAM
+- **FalkorDB**: 0GB VRAM (CPU only)
+- **Системные буферы**: ~2GB VRAM
+- **Резерв**: ~14GB VRAM
+- **ИТОГО**: 23.5GB VRAM → **9.5GB VRAM** (RTX 4070 достаточно!)
+
+#### CPU распределение:
+- **FalkorDB операции**: 2-4 cores
+- **Предобработка аудио/видео**: 2-4 cores
+- **API endpoints**: 2-4 cores
+- **Системные процессы**: 2-4 cores
+- **Резерв**: 4+ cores
+
+### OpenRouter интеграция
+
+**Jamba 1.5 через OpenRouter:**
+- **API**: REST/WebSocket для streaming
+- **Стоимость**: ~$0.2-0.4 за 1K токенов (входящие/исходящие)
+- **Ограничения**: Rate limits согласно тарифу
+- **Latency**: 20-50мс первый токен + сетевая задержка
+- **Failover**: Backup модель (Qwen2.5-14B)
+
+### Сетевые требования
+
+**Сервер → OpenRouter:**
+- **Пропускная способность**: 1Mbps per пользователь
+- **Latency**: <50мс до OpenRouter API
+- **Надежность**: 99.9% uptime
+
+**WowCube → Сервер:**
+- **BLE 5.x**: 544 kbps (288 kbps видео + 256 kbps аудио)
+- **IP канал**: 1Mbps (с запасом)
+- **Latency**: 50-100мс total round-trip
 
 ---
 
-## Notes
+## MVP временные показатели
 
-This README reflects the new hybrid architecture and storage model.
-If you update core components, update the architecture doc first.
+### Задержки компонентов:
+- **Детекция активности**: 5-20мс
+- **Face ID**: 50-100мс
+- **EmoVIT**: 100-200мс
+- **SenseVoiceSmall**: 200-300мс
+- **FalkorDB запросы**: 5-15мс
+- **Выбор шаблона**: 5мс
+- **Jamba первый токен**: 20-50мс (через OpenRouter)
+- **Dia TTS старт**: 50мс
+- **ThorVG анимация**: Real-time (0мс задержки)
+
+### Общее время отклика:
+- **От окончания речи до начала ответа**: 20-60мс (улучшение!)
+- **Полная генерация ответа**: 500-1500мс (в фоне)
+- **Целевой показатель**: <50мс для "мгновенного" эффекта
+
+---
+
+## Масштабируемость MVP
+
+### Один GPU сервер может обслуживать:
+- **Одновременных пользователей**: 10-20 (с batch processing)
+- **Пиковая нагрузка**: До 50 пользователей (с очередями)
+- **WowCube устройств**: До 100 (с кэшированием профилей)
+
+### Оптимизации производительности:
+- **Batch inference** для EmoVIT и SenseVoiceSmall
+- **Кэширование** FalkorDB запросов в Redis
+- **Connection pooling** для OpenRouter API
+- **Prefetching** эмоциональных профилей активных пользователей
+- **FalkorDB persistence** для быстрых concurrent операций
+
+---
+
+## Дополнительные соображения
+
+### Безопасность и приватность:
+- **Шифрование** всех каналов связи (TLS 1.3)
+- **Локальная обработка** Face ID (эталоны не покидают сервер)
+- **GDPR compliance** для пользовательских данных
+- **Retention policy** для аудио/видео данных
+
+### Мониторинг и диагностика:
+- **Real-time метрики** latency по каждому компоненту
+- **Resource utilization** (GPU/CPU/Memory)
+- **Error tracking** и automatic fallbacks
+- **User experience** метрики (время ответа, удовлетворенность)
+
+### Развертывание:
+- **Docker containers** для каждого компонента
+- **Kubernetes** orchestration для масштабирования
+- **CI/CD pipeline** для быстрых обновлений
+- **Blue-green deployment** для zero-downtime releases
+
+---
+
+## Заключение
+
+Данная архитектура обеспечивает создание MVP системы AI Live Pod с мгновенными ответами (<50мс) и высококачественными эмоциональными диалогами. Использование Jamba 1.5 через OpenRouter позволяет получить enterprise-качество генерации без необходимости содержать собственную инфраструктуру для больших языковых моделей.
+
+Ключевые преимущества решения:
+- **Мгновенные ответы** благодаря предиктивной обработке
+- **Высокое качество** диалогов с Jamba 1.5
+- **Эмоциональная персонализация** через FalkorDB event граф
+- **Энергоэффективность** с детекторами активности
+- **Масштабируемость** для множественных пользователей
+- **Экономичность** использования OpenRouter вместо собственных LLM
+
+
+---
+
+## Схема
+
+ ```mermaid
+
+flowchart TD
+    A[Видеопоток] --> A1[Детектор движения/лица]
+    A1 --> A2{Активность обнаружена?}
+    A2 -->|Нет| A3[Режим ожидания - камера в сон]
+    A2 -->|Да| B[Face ID: Распознавание лица]
+    
+    A3 --> A4[Периодическая проверка активности]
+    A4 --> A1
+    
+    B --> C{Пользователь найден в базе?}
+    
+    C -->|Нет| D[Создание нового профиля]
+    C -->|Да| E[Загрузка существующего профиля]
+    
+    D --> F[Сохранение эталона FaceID]
+    F --> G[Инициализация истории эмоций]
+    G --> H[FalkorDB: Создание узла пользователя]
+    H --> I[EmoVIT: Анализ эмоций лица]
+    
+    E --> J[FalkorDB: Загрузка данных пользователя]
+    J --> K[EmoVIT: Анализ эмоций лица]
+    
+    I --> L[История эмоций лица]
+    K --> L
+    
+    M[Аудиопоток] --> M1[Детектор голосовой активности VAD]
+    M1 --> M2{Голос обнаружен?}
+    M2 -->|Нет| M3[Режим ожидания - микрофон в сон]
+    M2 -->|Да| M5[Параллельная предобработка во время речи]
+    
+    M5 --> M6[FalkorDB: Быстрый запрос событий]
+    M5 --> M7[Анализ первых слов речи]
+    M5 --> M8[Подготовка контекста диалога]
+    
+    M6 --> M9[Генерация 3-5 шаблонов ответов]
+    M7 --> M9
+    M8 --> M9
+    
+    M2 --> N[SenseVoiceSmall: ASR + анализ эмоций голоса]
+    
+    M3 --> M4[Периодическая проверка звука]
+    M4 --> M1
+    
+    N --> O[История эмоций голоса]
+    N --> P[Текст от пользователя]
+    
+    L --> Q[Объединение эмоций лица и голоса]
+    O --> Q
+    Q --> R[Формирование эмоционального контекста с историей]
+    R --> S[FalkorDB: Обновление эмоционального профиля]
+    
+    D --> T[Флаг: Новый пользователь]
+    E --> U[Флаг: Существующий пользователь]
+    
+    T --> V1[Выбор лучшего шаблона ответа - 5мс]
+    U --> V1
+    S --> V1
+    P --> V1
+    J --> V1
+    H --> V1
+    M9 --> V1
+    
+    V1 --> V2[Мгновенный старт TTS streaming - 50мс]
+    V1 --> V3[15-20B LLM: Полная генерация в фоне]
+    
+    V2 --> W[FalkorDB: Сохранение контекста диалога]
+    V3 --> V4[Коррекция streaming по мере генерации]
+    V4 --> W
+    
+    W --> X{Новый пользователь?}
+    X -->|Да| Y[Добавление приветствия к ответу]
+    X -->|Нет| Z[Мультимодальный скрипт: текст + теги эмоций]
+    Y --> Z
+    
+    Z --> AA[Dia: Streaming синтез речи]
+    Z --> BB[Передача скрипта анимации на WowCube модуль]
+    
+    V4 --> AA1[Коррекция TTS stream по мере генерации]
+    AA1 --> AA
+    
+    AA --> CC[Выходной аудиопоток]
+    BB --> DD[ThorVG Avatar: Локальная анимация + lip-sync на модуле]
+    DD --> EE[Локальный видеопоток - Аватар]
+    
+    CC --> FF[Синхронизированный аудио/видео выход]
+    EE --> FF
+    
+    FF --> GG[Пользователь видит и слышит эмоционального аватара]
+    
+    style A1 fill:#ffeb3b
+    style A2 fill:#ffeb3b
+    style A3 fill:#f44336
+    style A4 fill:#f44336
+    style M1 fill:#ffeb3b
+    style M2 fill:#ffeb3b
+    style M3 fill:#f44336
+    style M4 fill:#f44336
+    style M5 fill:#4caf50
+    style M6 fill:#4caf50
+    style M7 fill:#4caf50
+    style M8 fill:#4caf50
+    style M9 fill:#4caf50
+    style V1 fill:#ff9800
+    style V2 fill:#ff5722
+    style V3 fill:#2196f3
+    style V4 fill:#2196f3
+    style AA1 fill:#ff5722
+    style B fill:#e1f5fe
+    style C fill:#ffecb3
+    style D fill:#f3e5f5
+    style E fill:#f3e5f5
+    style F fill:#e8f5e8
+    style G fill:#e8f5e8
+    style H fill:#e8eaf6
+    style J fill:#e8eaf6
+    style S fill:#e8eaf6
+    style W fill:#e8eaf6
+    style I fill:#e3f2fd
+    style K fill:#e3f2fd
+    style N fill:#e8f5e8
+    style X fill:#ffecb3
+    style Z fill:#fce4ec
+    style BB fill:#e1f5fe
+    style DD fill:#e1f5fe
+    style EE fill:#e1f5fe
+    style FF fill:#e0f2f1
+
+ ```
