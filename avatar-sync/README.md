@@ -79,6 +79,59 @@ Notes:
 4) Proxy -> timeline-sync: `audio_chunk`, `emotion`, `action`.
 5) Timeline-sync -> proxy -> browser: `audio_sync` packets for lipsync.
 
+## ThorVG Layered Animation (How It Renders)
+
+On the client side (ThorVG renderer), animation is applied in **stacked layers**
+so lipsync stays stable while reactions and FX are added on top:
+
+1) **Base rig (idle)**  
+   Default face/pose is always active to keep the avatar stable.
+
+2) **Jaw layer (audio energy)**  
+   `audio_sync.jaw` drives jaw openness with high‑frequency steps (16ms).
+
+3) **Lipsync layer (proxy visemes)**  
+   `audio_sync.viseme_proxy` selects mouth shapes (REST/A/O/F) at 50ms steps.
+   This layer modifies mouth geometry without breaking the jaw signal.
+
+4) **Emotion layer**  
+   Emotion tags (e.g., `happy`, `curious`) blend into brow/eyes/mouth corners
+   with attack/release smoothing. This layer should not override jaw timing.
+
+5) **Action/FX layer**  
+   Action tags (e.g., `sing`, `laugh`, `sfx_*`) trigger short overlays:
+   - `sing`: alternate singing mouth or rhythmic sway
+   - `laugh`: bounce or rapid jaw pulses
+   - `sfx_*`: small sprite/shape overlays (sparkle, pop, etc.)
+
+This order keeps **lipsync authoritative**, while emotion/action layers remain
+additive and reversible.
+
+## Canvas Animation via JSON (Future Direction)
+
+The avatar animation is driven by **JSON packets** over WebSocket and rendered
+in the browser on canvas via ThorVG. This makes the whole animation pipeline
+controllable as data.
+
+Long‑term, the plan is to put **LLM‑generated animation** in the loop:
+
+- A dedicated model will stream JSON commands in real time.
+- These commands can generate **unique, non‑repetitive canvas animation** on
+  the fly (not just lip‑sync).
+- The avatar becomes a fully programmable canvas actor with **LLM‑driven** motion.
+
+## Why Canvas + CPU (Browser) Works Well
+
+- **Low latency**: immediate rendering from WebSocket packets without GPU setup.
+- **Predictable timing**: the browser main thread can align lipsync to audio
+  playhead with millisecond steps.
+- **Small assets**: JSON + vector data is compact, even vs sprite animation.
+- **Server render option**: can be rendered on backend at ~30fps if needed.
+- **Easy debugging**: canvas render state is visible and easy to log/inspect.
+- **Portable**: runs on any modern browser without native dependencies.
+- **Good for rapid iteration**: ideal for testing animation pipelines before
+  moving to heavier GPU/engine stacks.
+
 ## Notes
 
 - Action tags are emitted as events; actual animations are implemented client-side.
