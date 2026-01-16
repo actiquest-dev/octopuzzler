@@ -22,10 +22,12 @@
 #include "gaze_calculator.h"
 #include <cstring>
 #include <cmath>
+#include <cstdlib>
+#include <string>
 
 // Frame skip intervals
-constexpr int FACE_DETECTION_INTERVAL = 6;  // Every 6 frames (2.5 FPS @ 15 FPS camera)
-constexpr int EYE_TRACKING_INTERVAL = 3;    // Every 3 frames (5 FPS @ 15 FPS camera)
+constexpr int FACE_DETECTION_INTERVAL = 2;  // Every 2 frames (~10 FPS @ 20 FPS camera)
+constexpr int EYE_TRACKING_INTERVAL = 2;    // Every 2 frames (~10 FPS @ 20 FPS camera)
 
 EyeTrackingSystem::EyeTrackingSystem()
     : blazeface_(nullptr)
@@ -68,6 +70,18 @@ EyeTrackingSystem::~EyeTrackingSystem()
     }
 }
 
+static std::string ResolveModelPath(const char* filename)
+{
+    const char* dir = std::getenv("OCTO_MODELS_DIR");
+    if (!dir || !*dir) {
+        dir = "models";
+    }
+    std::string path(dir);
+    path.push_back('/');
+    path += filename;
+    return path;
+}
+
 bool EyeTrackingSystem::initialize()
 {
     printf("[EyeTracking] Initializing optimized eye tracking (5 FPS)...\n");
@@ -75,20 +89,16 @@ bool EyeTrackingSystem::initialize()
     // Initialize BlazeFace detector
     printf("[EyeTracking] Loading BlazeFace detector...\n");
     blazeface_ = new BlazeFaceDetector();
-    if (!blazeface_->initialize("/models/blazeface.tflite")) {
+    const std::string blazeface_path = ResolveModelPath("blazeface.tflite");
+    if (!blazeface_->initialize(blazeface_path.c_str())) {
         printf("[EyeTracking] ERROR: Failed to load BlazeFace\n");
         return false;
     }
     printf("[EyeTracking] ✓ BlazeFace loaded (2.5MB)\n");
     
-    // Initialize MediaPipe Face Mesh
-    printf("[EyeTracking] Loading MediaPipe Face Mesh...\n");
-    facemesh_ = new MediaPipeFaceMesh();
-    if (!facemesh_->initialize("/models/facemesh_lite.tflite")) {
-        printf("[EyeTracking] ERROR: Failed to load Face Mesh\n");
-        return false;
-    }
-    printf("[EyeTracking] ✓ Face Mesh loaded (30MB)\n");
+    // Face Mesh disabled: use BlazeFace-only gaze for CPU stability.
+    facemesh_ = nullptr;
+    printf("[EyeTracking] Face Mesh disabled (BlazeFace-only gaze)\n");
     
     // Initialize gaze calculator
     gaze_calc_ = new GazeCalculator();
@@ -113,6 +123,11 @@ bool EyeTrackingSystem::process_frame(const uint8_t* frame_data, int width, int 
     // Stage 2: Eye Tracking (every 3 frames = 5 FPS)
     if (frame_count_ % EYE_TRACKING_INTERVAL == 0 && has_valid_face_) {
         track_eyes(frame_data, width, height);
+    }
+
+    if (has_valid_face_) {
+        // Keep current gaze in sync with latest target when running per-frame updates.
+        interpolate(1.0f);
     }
     
     return has_valid_face_;
@@ -156,6 +171,19 @@ void EyeTrackingSystem::detect_face(const uint8_t* frame_data, int width, int he
         
         // Extract face ROI and resize to 200×200
         extract_and_resize_roi(frame_data, width, height);
+
+        // Fallback gaze: if FaceMesh isn't available, steer eyes using face center.
+        if (!facemesh_) {
+            const float cx = detection.bbox_x + detection.bbox_width * 0.5f;
+            const float cy = detection.bbox_y + detection.bbox_height * 0.5f;
+            const float nx = (cx / std::max(1, width)) * 2.0f - 1.0f;
+            const float ny = (cy / std::max(1, height)) * 2.0f - 1.0f;
+            const float clamped_x = std::max(-1.0f, std::min(1.0f, nx));
+            const float clamped_y = std::max(-1.0f, std::min(1.0f, ny));
+            add_to_history(clamped_x, clamped_y);
+            smooth_gaze();
+            is_blinking_ = false;
+        }
     } else {
         has_valid_face_ = false;
     }
@@ -163,6 +191,9 @@ void EyeTrackingSystem::detect_face(const uint8_t* frame_data, int width, int he
 
 void EyeTrackingSystem::track_eyes(const uint8_t* frame_data, int width, int height)
 {
+    if (!facemesh_) {
+        return;
+    }
     // Run MediaPipe Face Mesh on face ROI
     FaceLandmarks landmarks;
     bool success = facemesh_->process(face_roi_, 200, 200, landmarks);

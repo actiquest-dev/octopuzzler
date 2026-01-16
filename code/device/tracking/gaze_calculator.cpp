@@ -6,6 +6,7 @@
  */
 
 #include "gaze_calculator.h"
+#include <algorithm>
 #include <cmath>
 
 // MediaPipe landmark indices (468-point model)

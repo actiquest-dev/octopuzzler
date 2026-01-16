@@ -1,3 +1,6 @@
+#include <cstddef>
+#include <vector>
+
 class GazeFilter {
 public:
     GazeFilter(int window_size = 5) : window_size(window_size) {

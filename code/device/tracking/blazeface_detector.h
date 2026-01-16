@@ -6,15 +6,12 @@
 #define BLAZEFACE_DETECTOR_H
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
-// Forward declarations
-namespace tflite {
-    class Model;
-    class MicroInterpreter;
-}
-
-struct TfLiteTensor;
+#include <tensorflow/lite/c/common.h>
+#include <tensorflow/lite/interpreter.h>
+#include <tensorflow/lite/model.h>
 
 /**
  * Face detection result
@@ -80,19 +77,32 @@ public:
     );
 
 private:
-    // TFLite components
-    const tflite::Model* model_;
-    tflite::MicroInterpreter* interpreter_;
-    TfLiteTensor* input_tensor_;
-    TfLiteTensor* output_boxes_tensor_;
-    TfLiteTensor* output_scores_tensor_;
-    uint8_t* tensor_arena_;
-    
+    struct Anchor {
+        float x_center;
+        float y_center;
+        float w;
+        float h;
+    };
+
     // Helper methods
     void preprocess_image(const uint8_t* image_data, int width, int height);
     std::vector<FaceDetection> nms(const std::vector<FaceDetection>& detections, float iou_threshold);
     float calculate_iou(const FaceDetection& a, const FaceDetection& b);
+    void build_anchors(int num_anchors);
+    bool decode_detections(int width, int height, FaceDetection& detection);
+
+    // TFLite state
+    std::unique_ptr<tflite::FlatBufferModel> model_;
+    std::unique_ptr<tflite::Interpreter> interpreter_;
+    TfLiteTensor* input_tensor_;
+    TfLiteTensor* output_boxes_tensor_;
+    TfLiteTensor* output_scores_tensor_;
+
+    std::vector<float> input_buffer_;
+    std::vector<Anchor> anchors_;
+    int input_w_;
+    int input_h_;
+    bool is_quantized_;
 };
 
 #endif // BLAZEFACE_DETECTOR_H
-```

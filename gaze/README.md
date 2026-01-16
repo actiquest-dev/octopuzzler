@@ -44,6 +44,12 @@ bash build_gaze.sh
 
 This builds `code/tools/gaze_capture_macos`.
 
+## Current State
+
+- `code/tools/gaze_capture_macos` (macOS binary) is included as proof-of-life.
+- BlazeFace-only gaze is enabled (FaceMesh disabled).
+- Target: recompile the same MM code for Beken (7254).
+
 ## Run
 
 1. Ensure the model exists:
@@ -102,4 +108,3 @@ This builds `code/tools/gaze_capture_macos`.
 - For low latency, increase camera FPS in the browser (10 FPS works well).
 - If you see `Landmarks2TransformMatrix` errors, FaceMesh is still enabled.
   Keep FaceMesh disabled for CPU-only mode.
-
